@@ -27,3 +27,6 @@ Route::get('/auth/google', 'Auth\GoogleAuthController@redirect')->name('auth.goo
 Route::get('/auth/google/callback', 'Auth\GoogleAuthController@callback');
 
 
+Route::get('/secret', function (){
+    return 'secret';
+})->middleware('auth');
