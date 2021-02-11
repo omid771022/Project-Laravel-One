@@ -35,6 +35,26 @@ class GoogleAuthController extends Controller
             }
 
             return redirect('/');
+        alert()->error('ورود با گوگل موفق نبود' , 'شما ارور دارید')->persistent('بسیار خوب');
+        return redirect('/login');
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

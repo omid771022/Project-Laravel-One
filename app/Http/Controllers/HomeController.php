@@ -23,6 +23,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+alert()->error('welcome to roocket' , 'Message')->persistent('ok');
+
         return view('home');
     }
 }

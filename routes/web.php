@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+    alert()->success('welcome to project one' , 'Message')->persistent('ok');
+    alert()->error('welcome to project one' , 'Message')->persistent('ok');
+
     return view('welcome');
 });
 
