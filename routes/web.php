@@ -14,15 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    alert()->success('welcome to project one' , 'Message')->persistent('ok');
-    alert()->error('welcome to project one' , 'Message')->persistent('ok');
+
 
     return view('welcome');
 });
 
-Auth::routes();
+Auth::routes(['verify'=>true]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware(['verify' => true]);
 Route::get('/auth/google', 'Auth\GoogleAuthController@redirect')->name('auth.google');
 Route::get('/auth/google/callback', 'Auth\GoogleAuthController@callback');
 
@@ -30,3 +29,6 @@ Route::get('/auth/google/callback', 'Auth\GoogleAuthController@callback');
 Route::get('/secret', function (){
     return 'secret';
 })->middleware('auth');
+
+
+

@@ -32,6 +32,7 @@ class GoogleAuthController extends Controller
                 ]);
 
                 auth()->loginUsingId($newUser->id);
+
             }
 
             return redirect('/');
