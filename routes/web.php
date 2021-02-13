@@ -29,6 +29,8 @@ Route::get('/auth/google/callback', 'Auth\GoogleAuthController@callback');
 Route::get('/secret', function (){
     return 'secret';
 })->middleware('auth');
+Route::get('/profile', 'ProfileController@index')->name('profile');
 
+Route::get('profile/twofactor', 'ProfileController@manageTwoFactor')->name('profile.2fa.manage');
 
 
