@@ -97,6 +97,6 @@
             </div>
         </div>
     </body>
-    <script src="{{ asset('/js/app.js') }}"></script>
-    @include('sweet::alert')
+    <script src="{{asset('/js/app.js')}}"></script>
+@include('sweet::alert');
 </html>

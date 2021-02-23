@@ -8,16 +8,16 @@
                     <div class="card-header">
                         <ul class="nav nav-pills card-header-pills">
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('profile') ? 'active' : '' }}" href="{{ route('profile') }}">Index</a>
+                                <a class="nav-link {{request()->path() === 'profile' ? 'active':''}}" href="{{ route('profile') }}">Index</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('profile/twofactor') ? 'active' : '' }}" href="{{ route('profile.2fa.manage') }}">TwoFactorAuth</a>
+                                <a class="nav-link {{request()->path() === 'profile/twofactor' ? 'active': ''}} " href="{{ route('profile.2fa.manage') }}">TwoFactorAuth</a>
                             </li>
                         </ul>
                     </div>
 
                     <div class="card-body">
-                       @yield('main')
+                        @yield('main')
                     </div>
                 </div>
             </div>

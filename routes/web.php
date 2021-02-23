@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,24 +11,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\ActiveCode;
+
 Route::get('/', function () {
-
-
     return view('welcome');
 });
 
-Auth::routes(['verify'=>true]);
+Auth::routes(['verify' => true]);
+Route::get('/auth/google' ,'Auth\GoogleAuthController@redirect')->name('auth.google');
+Route::get('/auth/google/callback' ,'Auth\GoogleAuthController@callback');
+Route::get('/auth/token' ,'Auth\AuthTokenController@getToken')->name('2fa.token');
+Route::post('/auth/token' ,'Auth\AuthTokenController@postToken');
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware(['verify' => true]);
-Route::get('/auth/google', 'Auth\GoogleAuthController@redirect')->name('auth.google');
-Route::get('/auth/google/callback', 'Auth\GoogleAuthController@callback');
 
-
-Route::get('/secret', function (){
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/secret' , function() {
     return 'secret';
-})->middleware('auth');
-Route::get('/profile', 'ProfileController@index')->name('profile');
+})->middleware(['auth' , 'password.confirm']);
 
-Route::get('profile/twofactor', 'ProfileController@manageTwoFactor')->name('profile.2fa.manage');
 
+Route::middleware('auth')->group(function() {
+    Route::get('profile' , 'ProfileController@index')->name('profile');
+    Route::get('profile/twofactor' , 'ProfileController@manageTwoFactor')->name('profile.2fa.manage');
+    Route::post('profile/twofactor' , 'ProfileController@postManageTwoFactor');
+
+    Route::get('profile/twofacto/phone' , 'ProfileController@getPhoneVerify')->name('profile.2fa.phone');
+    Route::post('profile/twofacto/phone' , 'ProfileController@postPhoneVerify');
+});
 

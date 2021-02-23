@@ -7,10 +7,14 @@
             <div class="card">
                 <div class="card-header">{{ __('Login') }}</div>
 
+
+
                 <div class="card-body">
-                    <div class="col-md-8 offset-md-4 mb-3">
-                        <a href="{{ route('auth.google') }}" class="btn btn-danger">Login With Google</a>
-                    </div>
+                <div class="col-md-8 offset-md-4">
+                    <a href="{{route('auth.google')}}" class="btn btn-danger">ورود با  گوگل </a>
+                </div>
+                    <br>
+
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
 
