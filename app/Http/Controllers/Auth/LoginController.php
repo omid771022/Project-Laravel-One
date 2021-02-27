@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\ActiveCode;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
+use App\Rules\Recaptcha;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 
@@ -21,7 +22,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers , TwoFactorAuthenticate;
 
     /**
      * Where to redirect users after login.
@@ -40,27 +41,27 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-protected function authenticated(Request $request, $user)
-{
-    if($user->hasTwoFactorAuthenticatedEnabled()){
-auth()->logout();
-$request->session()->flash('auth', [
-   'user_id'=>$user->id,
+    protected function authenticated(Request $request, $user)
+    {
+        return $this->loggendin($request , $user);
+    }
 
-'using_sms'=> false,
-'remember'=>$request->has('remember')
-   ]);
-
-if($user->two_factor_type == 'sms'){
-    $code= ActiveCode::generateCode($user);
-
-$request->session()->push('auth.using_sms' , true); 
-}
-return redirect(route('2fa.token'));
-}
-
-return false;
-}
-
-
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
+    {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'g-recaptcha-response' => ['required' , new Recaptcha]
+        ],[
+            'g-recaptcha-response.required' => 'لطفا روی من ربات نیستم کلیک کنید'
+        ]);
+    }
 }

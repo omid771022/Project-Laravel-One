@@ -16,6 +16,7 @@
         "laravel/socialite": "^5.1",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.4",
+        "mohsenbostan/ghasedak-sms": "^1.2",
         "uxweb/sweet-alert": "^2.0"
     },
     "require-dev": {

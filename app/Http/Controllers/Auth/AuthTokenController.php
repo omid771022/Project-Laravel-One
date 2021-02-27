@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\ActiveCode;
-use App\Http\Controllers\Controller;
 use App\User;
+use App\ActiveCode;
+use Ghasedak\GhasedakApi;
 use Illuminate\Http\Request;
+use MohsenBostan\GhasedakSms;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthTokenController extends Controller
 {
@@ -15,7 +18,10 @@ class AuthTokenController extends Controller
             return redirect(route('login'));
         }
 
-        $request->session()->reflash();
+   $user= $request->session()->reflash();
+
+
+    
 
         return view('auth.token');
     }
@@ -33,7 +39,7 @@ class AuthTokenController extends Controller
         $user = User::findOrFail($request->session()->get('auth.user_id'));
 
         $status = ActiveCode::verifyCode($request->token , $user);
-
+    
         if(! $status) {
             alert()->error('کد صحیح نبود');
             return redirect(route('login'));

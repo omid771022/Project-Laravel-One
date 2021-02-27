@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\ActiveCode;
+use Ghasedak\GhasedakApi;
 use Illuminate\Http\Request;
+use MohsenBostan\GhasedakSms;
+use App\Notifications\ActiveCodeNotification;
 
 class ProfileController extends Controller
 {
@@ -12,8 +15,11 @@ class ProfileController extends Controller
         return view('profile.index');
     }
 
-    public function manageTwoFactor()
+    public function manageTwoFactor(Request $request)
     {
+
+
+        
         return view('profile.two-factor-auth');
     }
 
@@ -21,7 +27,7 @@ class ProfileController extends Controller
     {
         $data = $request->validate([
             'type' => 'required|in:sms,off',
-            'phone' => 'required_unless:type,off'
+            'phone' => 'required_unless:type,off|unique:users,phone_number'
         ]);
 
         if($data['type'] === 'sms') {
@@ -30,13 +36,12 @@ class ProfileController extends Controller
                 $code = ActiveCode::generateCode($request->user());
                 $request->session()->flash('phone' , $data['phone']);
                 // send the code to user phone number
-                // TODO Send Sms
+                $request->user()->notify(new ActiveCodeNotification($code , $data['phone']));
 
                 return redirect(route('profile.2fa.phone'));
             } else {
                 $request->user()->update([
                     'two_factor_type' => 'sms'
-                    
                 ]);
             }
         }
